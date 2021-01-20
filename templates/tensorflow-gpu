@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: <pod_name>
+  namespace: <namespace>
+spec:
+  containers:
+    - name: <container_name>
+      image: <image_name>
+      computeResourceRequests: ["nvidia-gpu"]
+  computeResources:
+    - name: "nvidia-gpu"
+      resources:
+        limits:
+          nvidia.com/gpu: <numnvidia>

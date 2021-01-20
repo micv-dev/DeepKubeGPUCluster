@@ -1,0 +1,97 @@
+namespace: "<namespaceName>"
+persistence:
+  data:
+    volume:
+      mountPath: "/volume"
+      existingClaim: "<existingClaim>"
+
+dirs:
+  nvidia:
+    lib: "/usr/lib/nvidia-390"  # e.g. "/usr/lib/nvidia-384"
+    bin: "/usr/lib/nvidia-390/bin"  # e.g. "/usr/lib/nvidia-384/bin"
+    libcuda: "/usr/lib/x86_64-linux-gnu/libcuda.so.1"  # e.g. "/usr/lib/x86_64-linux-gnu/libcuda.so.1"
+
+# This is where we mount nvidia on hosts
+mountPaths:
+  nvidia:
+    lib: "/usr/lib/nvidia-390"
+    bin: "/usr/local/nvidia-390/bin"
+    libcuda: "/usr+/lib/x86_64-linux-gnu/libcuda.so.1"
+
+
+
+docker-registry:
+  # Whether to deploy a docker registry in-cluster.
+  # To use an external registry instance:
+  #  * set enabled to False, to disable the in-cluster deployment
+  #  * configure external registry required attributes:
+  #     external:
+  #       host:
+  #       port:
+  enabled: true
+  external:
+    host:
+    port:
+  auth:
+    user:
+    password:
+  service:
+    type: NodePort
+    nodePort: <nodePort>
+  resources:
+    requests:
+      cpu: 300m
+      memory: 312Mi
+  persistence:
+    enabled: false
+  affinity:
+    podAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+              - key: type
+                operator: In
+                values:
+                - "polyaxon-core"
+            topologyKey: "kubernetes.io/hostname"
+
+
+api:
+  image: polyaxon/polyaxon-api
+  imageTag: 0.4.4
+  imagePullPolicy: Always
+  replicas: 1
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 2000Mi
+    requests:
+      cpu: 128m
+      memory: 300Mi
+
+  service:
+    name: api
+    externalPort: <apiExternalPort>
+    internalPort: 80
+    nodePort: 31811
+    annotations: {}
+
+streams:
+  image: polyaxon/polyaxon-streams
+  imageTag: 0.4.4
+  imagePullPolicy: Always
+  resources:
+    limits:
+      cpu: 700m
+      memory: 1000Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+  service:  # service type is the same as api
+    name: streams
+    externalPort: <streamExternalPort>
+    internalPort: 1337
+    nodePort: 31812
