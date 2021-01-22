@@ -1,0 +1,9 @@
+INSERT INTO `dpu` (`id`, `name`, `gpu`, `memory`, `vcpu`, `createdOn`, `modifiedOn`) VALUES (1, 'dpu-cpu', '', '32', '16', '2019-05-22 16:13:09', '2019-05-22 16:13:09');
+INSERT INTO `dpu` (`id`, `name`, `gpu`, `memory`, `vcpu`, `createdOn`, `modifiedOn`) VALUES (2, 'dpu-gpu-k80', 'k80', '32', '16', '2019-05-22 16:14:03', '2019-05-22 16:14:04');
+
+
+INSERT INTO `machinepool` (`id`, `name`, `ipAddress`, `internalIpAddress`, `userId`, `password`, `sshFilePath`, `dpuId_id`, `dpuCount`, `kubeVersion`, `role`, `status`, `minervaUserId`, `clusterName`, `createdOn`, `modifiedOn`) VALUES (1, '34.83.45.25 ', '34.83.45.25 ', '10.138.0.2', 'root', 'DG@12345', NULL, 1, '1', '1.14', 'MASTER', 'USED', 1, 'test', '2019-05-22 16:14:47', '2019-05-22 16:14:47');
+INSERT INTO `machinepool` (`id`, `name`, `ipAddress`, `internalIpAddress`, `userId`, `password`, `sshFilePath`, `dpuId_id`, `dpuCount`, `kubeVersion`, `role`, `status`, `minervaUserId`, `clusterName`, `createdOn`, `modifiedOn`) VALUES (2, '35.227.184.15 ', '35.227.184.15 ', '10.138.0.3', 'root', 'DG@12345', NULL, 2, '4', '1.14', 'WORKER', 'USED', 1, 'test', '2019-05-22 16:15:09', '2019-05-22 16:15:09');
+
+
+INSERT INTO `user` (`id`, `name`, `email`, `password`, `billingDate`, `firstSubscriptionOn`, `phone`, `address1`, `address2`, `datacenter_id`, `vlan_id`, `miscinfo`, `region_name`, `created`, `modified`) VALUES (1, 'user', 'user@gmail.com', 'test', '2019-05-25 15:50:18', '2019-05-25 15:50:19', '111', 'aa', 'ss', 1, 1, '1', 'mh', '2019-05-25 15:50:35', '2019-05-25 15:50:36');

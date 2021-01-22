@@ -1,0 +1,22 @@
+namespace: "<namespaceName>"
+persistence:
+  data:
+    volume:
+      mountPath: "/volume"
+      existingClaim: "<existingClaim>"
+    dataset:
+      mountPath: "/dataset"
+      existingClaim: "<dataSetClaim>"
+
+dirs:
+  nvidia:
+    lib: "/usr/lib/nvidia-390"  # e.g. "/usr/lib/nvidia-384"
+    bin: "/usr/lib/nvidia-390/bin"  # e.g. "/usr/lib/nvidia-384/bin"
+    libcuda: "/usr/lib/x86_64-linux-gnu/libcuda.so.1"  # e.g. "/usr/lib/x86_64-linux-gnu/libcuda.so.1"
+
+# This is where we mount nvidia on hosts
+mountPaths:
+  nvidia:
+    lib: "/usr/lib/nvidia-390"
+    bin: "/usr/local/nvidia-390/bin"
+    libcuda: "/usr+/lib/x86_64-linux-gnu/libcuda.so.1"

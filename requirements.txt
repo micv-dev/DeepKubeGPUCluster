@@ -1,0 +1,9 @@
+flask
+Flask-Cors
+tornado
+peewee
+kubernetes
+pymysql
+fabric
+SSHConf
+ConfigParser
