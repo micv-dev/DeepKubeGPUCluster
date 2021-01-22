@@ -20,6 +20,7 @@ This project aims to ease the job(one click set up) of setting up kubernetes clu
  - Get ready GPU kubernetes cluster platform in a matter of few minutes.
  - Supports hybrid GPU kubernetes cluster creation.
  - Resource allocation will be done intelligently.
+ - Ready to use cluster with pre-installed tensorflow,keras,pytorch,mxnet frameworks.
  - Uses high throughput read optimized GlusterFs volume to read the data.
  - Fault tolerant , highly available persistent storage.
  - Easy management of the cluster through intuitive UI.
