@@ -1,7 +1,8 @@
-from BaseModel import BaseModel
-
 from peewee import *
 import datetime
+
+from dataModels.BaseModel import BaseModel
+
 
 class User(BaseModel):
     name = CharField(max_length=256, unique=True) #Actual user name

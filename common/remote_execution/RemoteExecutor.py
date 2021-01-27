@@ -1,14 +1,14 @@
 import logging
 
-from flask import Flask
+from flask import Flask, app
 from fabric import Connection
 from invoke.exceptions import UnexpectedExit, ParseError, Exit
 from enum import Enum
-from SSHConf import *
 from common.Logging import *
-# app = Flask(__name__)
+app = Flask(__name__)
 #
 # logging.basicConfig(level=logging.DEBUG)
+from common.remote_execution.SSHConf import sshConfig
 
 app.log=get_log()
 class RemoteOperations(Enum):

@@ -1,9 +1,9 @@
-from BaseModel import BaseModel
 from peewee import *
 import datetime
-from KubeCluster import KubeCluster
-from DPU import DPU
-from GlusterFSVolume import GlusterFSVolume
+
+from dataModels.BaseModel import BaseModel
+from dataModels.GlusterFSVolume import GlusterFSVolume
+from dataModels.KubeCluster import KubeCluster
 from dataModels.User import User
 
 

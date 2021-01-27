@@ -4,7 +4,7 @@ from kubernetes.client import V1StorageClass, V1ObjectMeta
 from kubernetes.client.rest import ApiException
 
 from common import GetObject
-from common.MinervaEnums import StackStatus, ClusterRole
+from common.AppEnums import StackStatus, ClusterRole
 from dataModels.GlusterFSVolume import GlusterFSVolume
 from dataModels.KubeCluster import KubeCluster
 from common.MachineResource import *
@@ -49,29 +49,30 @@ class ClusterManagement:
 
     def deploy_nvidia_daemon(self):
         executor = self.master_machine[EXECUTOR]
-        output=executor.executeRemoteCommand("kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/1.0.0-beta/nvidia-device-plugin.yml")
-        validate_output(output, "daemonset.extensions/nvidia-device-plugin-daemonset created")
+        output=executor.executeRemoteCommand("kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.7.3/nvidia-device-plugin.yml")
+        validate_output(output, "daemonset.apps/nvidia-device-plugin-daemonset created")
 
     def init_kube_cluster(self):
         internalIp = self.master_machine[INTERNAL_IP_ADDRESS]
         executor = self.master_machine[EXECUTOR]
-        command=\
-            "kubeadm init  --pod-network-cidr={0} --apiserver-advertise-address={1}".format(DEFAULT_CIDR,internalIp)
+        command="kubeadm init"
         output=executor.executeRemoteCommand(command)
         validate_output(output, "you can join any number of worker nodes by running the following")
         executor.executeRemoteCommand("mkdir -p $HOME/.kube")
         executor.executeRemoteCommand("rm -rf $HOME/.kube/config;cp -i /etc/kubernetes/admin.conf $HOME/.kube/config")
+        executor.executeRemoteCommand("sudo chown $(id -u):$(id -g) $HOME/.kube/config")
+        executor.executeRemoteCommand("export KUBECONFIG=/etc/kubernetes/admin.conf")
 
         for i in range(CLUSTER_NODE_READY_SLEEP):
             output=executor.executeRemoteCommand("kubectl get nodes")
             try:
-                validate_output(output,"NotReady")
+                validate_output(output,"Ready")
                 break
             except Exception as exp:
                 log.exception(exp,msg=str(i))
             time.sleep(SLEEP_TIME)
         output=executor.executeRemoteCommand(
-            "kubectl -n kube-system apply -f https://raw.githubusercontent.com/coreos/flannel/bc79dd1505b0c8681ece4de4c0d86c5cd2643275/Documentation/kube-flannel.yml")
+            "kubectl apply -f https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')")
         validate_output(output,"created")
         # for i in range(CLUSTER_NODE_READY_SLEEP):
         #     output = executor.executeRemoteCommand("kubectl get nodes")
@@ -139,7 +140,7 @@ class ClusterManagement:
         cluster_management.add_worker_nodes()
         cluster.status=StackStatus.getString(StackStatus.DONE.value)
         cluster.save()
-        mount_gf_volume(cluster_management, DEFAULT_DATASET_VOLUME_NAME, DEFAULT_DATASET_MOUNT_PATH)
+        # mount_gf_volume(cluster_management, DEFAULT_DATASET_VOLUME_NAME, DEFAULT_DATASET_MOUNT_PATH)
         push_cluster_management_object(cluster_name,cluster_management)
 
     def add_worker_nodes(self):
@@ -167,7 +168,7 @@ class ClusterManagement:
                                 "Msg is %s" % (machine[IP_ADDRESS], output.errString))
         self.check_if_cluster_is_ready()
         self.deploy_nvidia_daemon()
-        self.install_helm()
+        # self.install_helm()
         self.check_gpu_availability()
 
     @staticmethod

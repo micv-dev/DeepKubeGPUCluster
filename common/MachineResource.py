@@ -1,4 +1,4 @@
-from common.MinervaEnums import Resources
+from common.AppEnums import Resources
 from common.remote_execution.RemoteExecutor import RemoteExecuter
 from dataModels.MachineGPUResourceInfo import MachineGPUResourceInfo
 from dataModels.MachinePool import *
@@ -45,22 +45,25 @@ def machine_executor(record):
     return machine
 
 def get_machine(master_ip, cluster_id):
-    records=MachinePool.select().where((MachinePool.internalIpAddress==master_ip) &
-                                       (MachinePool.clusterId==0))
-    if len(records)==0:
-        raise Exception("Master %s,%s machines are not avalable" %(master_ip,cluster_id))
-    machine_record=records.get()
-    record=MachineGPUResourceInfo.select().where(MachineGPUResourceInfo.machinePool==machine_record).get()
-    record.allocatedDPUCount = record.allocatedDPUCount + 1
-    record.save()
-    machine_record.clusterId=cluster_id
-    machine_record.save()
-    machine=machine_executor(machine_record)
+    try:
+        records=MachinePool.select().where((MachinePool.internalIpAddress==master_ip) &
+                                           (MachinePool.clusterId==None))
+        if len(records)==0:
+            raise Exception("Master %s,%s machines are not avalable" %(master_ip,cluster_id))
+        machine_record=records.get()
+        record=MachineGPUResourceInfo.select().where(MachineGPUResourceInfo.machinePool==machine_record).get()
+        record.allocatedDPUCount = record.allocatedDPUCount + 1
+        record.save()
+        machine_record.clusterId=cluster_id
+        machine_record.save()
+        machine=machine_executor(machine_record)
+    except Exception as exp:
+        raise exp
     return machine
 
 def get_worker_machine(master_ip, cluster_id):
     records=MachinePool.select().where((MachinePool.internalIpAddress==master_ip) &
-                                       (MachinePool.clusterId==0))
+                                       (MachinePool.clusterId==None))
     if len(records)==0:
         raise Exception("Master %s,%s machines are not avalable" %(master_ip,cluster_id))
     record=records.get()

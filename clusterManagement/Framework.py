@@ -4,7 +4,7 @@ from kubernetes.client import V1Service, V1ServiceSpec, V1ServicePort, V1Endpoin
 from Constants import *
 from clusterManagement.ClusterManagement import ClusterManagement
 from common import GetObject
-from common.MinervaEnums import StackStatus
+from common.AppEnums import StackStatus
 from common.Utils import mount_gf_volume, get_gfs_endpoint_name
 from common.VolumeManagement import *
 from common import Logging as log
@@ -135,9 +135,9 @@ class Framework:
                                 glusterVolumeId=gfs)
         namespace.save()
         framework=GetObject.get_ml_object(payload[FRAMEWORK_TYPE])
-        framework.create_cluster(payload,self.cluster_management,namespace_name,volume_claim_name,dataset_pvc_name)
+        framework.create_cluster(payload,self.cluster_management,namespace_name,volume_claim_name)
         namespace.status=StackStatus.getString(StackStatus.DONE.value)
-        mount_gf_volume(cluster_management, volume_name, DEFAULT_CLUSTER_VOLUME_MOUNT_PATH)
+        # mount_gf_volume(cluster_management, volume_name, DEFAULT_CLUSTER_VOLUME_MOUNT_PATH)
         namespace.save()
         return name
 

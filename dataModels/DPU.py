@@ -1,6 +1,8 @@
-from BaseModel import BaseModel
 from peewee import *
 import datetime
+
+from dataModels.BaseModel import BaseModel
+
 
 class DPU(BaseModel):
     name = TextField()

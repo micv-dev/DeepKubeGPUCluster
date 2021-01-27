@@ -1,5 +1,5 @@
 
-PATH="/minerva/"
+PATH="/cluster/"
 CLUSTER_PATH=PATH+"kubeCluster/"
 CREATE_CLUSTER_PATH=CLUSTER_PATH+"create"
 DELETE_CLUSTER_PATH=CLUSTER_PATH+"delete"

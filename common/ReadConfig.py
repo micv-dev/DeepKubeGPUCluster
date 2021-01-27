@@ -1,6 +1,7 @@
-import ConfigParser
+from configparser import ConfigParser
+
 
 def getConfig():
-    config = ConfigParser.RawConfigParser()
-    config.read('/root/PycharmProjects/Minerva/config/minereva.config')
+    config = ConfigParser()
+    config.read('config/app.config')
     return config

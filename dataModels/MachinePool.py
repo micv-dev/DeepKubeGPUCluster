@@ -1,8 +1,7 @@
-from MySQLdb.constants.FIELD_TYPE import NULL
-
-from BaseModel import BaseModel
 from peewee import *
 import datetime
+
+from dataModels.BaseModel import BaseModel
 
 
 class MachinePool(BaseModel):

@@ -1,7 +1,7 @@
-from BaseModel import BaseModel
 from peewee import *
 import datetime
 
+from dataModels.BaseModel import BaseModel
 from dataModels.User import User
 
 
